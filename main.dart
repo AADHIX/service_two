@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 void main() {
@@ -52,14 +53,13 @@ class HeaderSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 40.0), // Adds space to the left
+      padding: const EdgeInsets.only(left: 40.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment
-            .start, // Ensures content is aligned to the left inside the Column
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
             'Find professional\nservices in your area',
-            textAlign: TextAlign.left, // Left-aligns the text
+            textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 60,
               fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class HeaderSection extends StatelessWidget {
           const SizedBox(height: 20),
           const Text(
             'Autospace is one of the most finest group of\ncollaborative services you wish for',
-            textAlign: TextAlign.left, // Aligns the text content to the left
+            textAlign: TextAlign.left,
             style: TextStyle(
               fontSize: 18,
               fontFamily: 'Roboto',
@@ -78,12 +78,11 @@ class HeaderSection extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           Row(
-            mainAxisAlignment: MainAxisAlignment
-                .start, // Ensures row content is aligned to the left
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image.asset('assets/google_play.png', height: 20),
               const SizedBox(width: 10),
-              Image.asset('assets/app_store.png', height: 20),
+              Image.asset('assets/app_store.png', height: 60),
             ],
           ),
         ],
@@ -135,10 +134,8 @@ class AboutUsSection extends StatelessWidget {
       children: [
         Container(
           width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height* 0.9,
-
-         
-          padding: const EdgeInsets.all(100), // Increased padding here
+          height: MediaQuery.of(context).size.height * 0.9,
+          padding: const EdgeInsets.all(100),
           decoration: BoxDecoration(
             color: Colors.orange,
             borderRadius: BorderRadius.circular(20),
@@ -199,114 +196,142 @@ class AboutUsSection extends StatelessWidget {
   }
 }
 
-class ServicesCardsSection extends StatefulWidget {
+class ServicesCardsSection extends StatelessWidget {
   const ServicesCardsSection({super.key});
-
-  @override
-  _ServicesCardsSectionState createState() => _ServicesCardsSectionState();
-}
-
-class _ServicesCardsSectionState extends State<ServicesCardsSection> {
-  // To store the hover state for each card
-  List<bool> _isHovered = List.generate(8, (index) => false);
 
   @override
   Widget build(BuildContext context) {
     final services = [
-      'Nearby Parking Search',
-      'Navigation to Parking Lot',
-      'Pre-booking of Parking Slots',
-      'Slot Extension',
-      'Real-time Parking Slot Availability',
-      'Notifications for Parking Time Expiration',
-      'Monthly/Yearly Subscription Plans',
-      'Automatic Entry/Exit'
+      {
+        'title': 'Nearby Parking Search',
+        'description':
+            'Users can check the availability of parking slots in nearby parking plots.',
+      },
+      {
+        'title': 'Navigation to Parking Lot',
+        'description':
+            'The app provides navigation assistance to the selected parking lot using Google Maps.',
+      },
+      {
+        'title': 'Pre-booking of Parking Slots',
+        'description':
+            'Users can pre-book a parking slot for a specific time and select the duration for which they need the parking.',
+      },
+      {
+        'title': 'Slot Extension',
+        'description':
+            'Users can extend their parking time after pre-booking if needed.',
+      },
+      {
+        'title': 'Real-time Parking Slot Availability',
+        'description':
+            'The app provides real-time information on the availability of parking slots in the parking plot.',
+      },
+      {
+        'title': 'Notifications for Parking Time Expiration',
+        'description':
+            'Users receive notifications when their parking time is about to end, prompting them to extend if necessary.',
+      },
+      {
+        'title': 'Monthly/Yearly Subscription Plans',
+        'description':
+            'Users can opt for a subscription plan (monthly or yearly) for continuous parking service.',
+      },
+      {
+        'title': 'Automatic Entry/Exit',
+        'description':
+            'The app supports automatic entry and exit using license plate recognition for seamless gate operation without manual intervention.',
+      },
     ];
 
-    final descriptions = [
-      'Users can check the availability of parking slots in nearby parking plots.',
-      'The app provides navigation assistance to the selected parking lot using Google Maps.',
-      'Users can pre-book a parking slot for a specific time and select the duration for which they need the parking.',
-      'Users can extend their parking time after pre-booking if needed.',
-      'The app provides real-time information on the availability of parking slots in the parking plot.',
-      'Users receive notifications when their parking time is about to end, prompting them to extend if necessary.',
-      'Users can opt for a subscription plan (monthly or yearly) for continuous parking service.',
-      'The app supports automatic entry and exit using license plate recognition for seamless gate operation without manual intervention.'
-    ];
+    return CarouselSlider.builder(
+      itemCount: (services.length / 4).ceil(),
+      itemBuilder: (context, index, realIndex) {
+        final startIndex = index * 4;
+        final endIndex = (startIndex + 4).clamp(0, services.length);
+        final currentServices = services.sublist(startIndex, endIndex);
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4, // 2 cards per row for better visual balance
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 10),
-      itemCount: services.length,
-      itemBuilder: (context, index) {
-        return MouseRegion(
-          onEnter: (_) {
-            setState(() {
-              _isHovered[index] = true;
-            });
-          },
-          onExit: (_) {
-            setState(() {
-              _isHovered[index] = false;
-            });
-          },
-          child: Card(
-            elevation: 8,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            color: _isHovered[index]
-                ? Colors.orange
-                : Colors.white, // Hover color change
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width *
-                  0.42, // Adjust card width dynamically
-              height: 200, // Fixed height for consistency
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      services[index],
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: _isHovered[index]
-                            ? Colors.white
-                            : Colors.blueAccent, // Text color changes on hover
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                        height:
-                            12), // More spacing between title and description
-                    Text(
-                      descriptions[index],
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: Colors.black54,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
           ),
+          itemCount: currentServices.length,
+          itemBuilder: (context, index) {
+            final service = currentServices[index];
+            return Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: Colors.orange, // Changed background color to orange
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          service['title']!,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueAccent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          service['description']!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.black54,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  left: 10,
+                  child: Text(
+                    service['title']!,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                      backgroundColor: Colors.black54,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         );
       },
+      options: CarouselOptions(
+        autoPlay: true,
+        enlargeCenterPage: true,
+        aspectRatio: 2.0,
+        viewportFraction: 1.0,
+      ),
     );
   }
 }
-
 
 class EmbeddedYouTubeVideo extends StatefulWidget {
   const EmbeddedYouTubeVideo({super.key});
@@ -364,7 +389,7 @@ class _EmbeddedYouTubeVideoState extends State<EmbeddedYouTubeVideo> {
               child: Text(
                 language,
                 style: const TextStyle(
-                  color: Colors.red, // Set the text color to red
+                  color: Colors.red,
                 ),
               ),
             );
@@ -387,125 +412,6 @@ class _EmbeddedYouTubeVideoState extends State<EmbeddedYouTubeVideo> {
             ),
           ),
         ),
-        const SizedBox(height: 40),
-        // Footer Section
-         Container(
-       width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height* 0.5,
-     // Footer background color
-      
-      decoration: BoxDecoration(
-    color: Colors.blueAccent,  // Change to your desired color
-    borderRadius: BorderRadius.circular(20),  // Rounded corners
-  ), 
-  // Padding
-  
-      child: Column(
-         
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Logo or Company Name (optional)
-        const Center(
-  child: Padding(
-    padding: EdgeInsets.all(16.0),  // Adjust padding value as needed
-    child: Text(
-      'MyParking App',
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-  ),
-),
-
-        
-
-          // Description or slogan (optional)
-          const Text(
-            'Smart Parking Solutions for a Better Tomorrow',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 20),
-
-          // Footer Links (like Privacy Policy, Terms of Service)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Privacy Policy',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(width: 20),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Terms of Service',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              const SizedBox(width: 20),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Help & Support',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Social Media Icons (example with 3 platforms)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.facebook, color: Colors.white),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.facebook, color: Colors.white),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.one_x_mobiledata, color: Colors.white),
-                onPressed: () {},
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-
-          // Contact Information
-          const Text(
-            'Contact us: support@mparking.com',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Copyright Information
-          const Text(
-            '© 2025 MyParking App. All Rights Reserved.',
-            style: TextStyle(
-              color: Colors.white70,
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-        ],
-      ),
-    )
       ],
     );
   }
