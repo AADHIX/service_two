@@ -30,7 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  youtube_player_iframe:
+  youtube_player_iframe: 5.1.2
+  carousel_slider: ^5.0.0
 
 
   
